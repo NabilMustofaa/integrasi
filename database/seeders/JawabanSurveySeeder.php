@@ -14,6 +14,6 @@ class JawabanSurveySeeder extends Seeder
      */
     public function run()
     {
-        //
+        
     }
 }

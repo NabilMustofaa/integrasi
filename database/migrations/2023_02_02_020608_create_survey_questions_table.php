@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('survey_questions', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('question');
             $table->foreignId('survey_id')->constrained('surveys');
             $table->enum('type', ['text', 'number', 'date', 'time', 'datetime', 'email', 'tel', 'url', 'radio', 'checkbox', 'select', 'textarea']);
             $table->timestamps();
