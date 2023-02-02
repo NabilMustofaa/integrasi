@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\SalesTeam;
 use App\Models\Survey;
 use App\Models\SurveyCategory;
 use App\Models\User;
@@ -34,5 +35,14 @@ class DatabaseSeeder extends Seeder
             'name' => 'Kategori B',
             'created_by' => 1,
         ]);
+
+        SalesTeam::create([
+            'name' => 'Sales A',
+            'phone' => '08123456789',
+            'address' => 'Jl. A',
+            'created_by' => 1,
+        ]);
+
+
     }
 }

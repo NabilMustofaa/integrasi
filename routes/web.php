@@ -27,5 +27,6 @@ Route::prefix('survey')->group(function () {
 Route::prefix('store')->group(function () {
     Route::get('/', [StoreController::class, 'index'])->name('store.index');
     Route::get('/create', [StoreController::class, 'create'])->name('store.create');
+    Route::post('/', [StoreController::class, 'store'])->name('store.store');
 });
 

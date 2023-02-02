@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\QuestionOptionApiController;
+use App\Http\Controllers\StoreApiController;
 use App\Http\Controllers\SurveyApiController;
 use App\Http\Controllers\SurveyQuestionApiController;
 use Illuminate\Http\Request;
@@ -46,4 +47,8 @@ Route::prefix('question')->group(function () {
     Route::delete('/{surveyQuestion}/option/{questionOption}', [QuestionOptionApiController::class, 'destroy'])->name('question.option.destroy');
 });
 
+Route::prefix('store')->group(function () {
+    Route::get('/', [StoreApiController::class, 'index'])->name('store.index');
+    
+});
 

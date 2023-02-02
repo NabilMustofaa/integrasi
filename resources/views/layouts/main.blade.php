@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   @vite('resources/css/app.css')
-
+  <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
   @yield('styles')
 </head>
-<body class=" h-screen w-screen">
+<body class=" h-screen w-screen dx-viewport">
   
   @include('partials.nav')
   <div class=" flex w-screen">
@@ -23,7 +23,7 @@
   
 
   @vite('resources/js/app.js')
-  <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+
 
   @yield('scripts')
   
