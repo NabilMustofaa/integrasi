@@ -71,7 +71,20 @@ const createBasicQuestion = (data) => {
 };
 
 const createOptionQuestion = (data) => {
-  let form = `
+  let form;
+  if (data.type=='select'){
+    form = `<form method="POST" action="/api/survey/${data.survey_id}/question/${data.id}/expected" class="flex flex-col">
+    <label for="option_${data.id}">${data.question}</label>
+    <select name="expected" id="option_select_${data.id}" class="border border-gray-500 rounded-md shadow-md">
+    </select>
+    <div class="flex">
+    <input type="text" name="option" id="option_${data.id}" class="border border-gray-500 rounded-md shadow-md">
+    <button type="button" class="block bg-red-400 text-white font-bold py-2 px-4 rounded" onclick="createOption('${data.id}','${data.type}')">Add Option</button>
+    </div>
+    </form>`;
+  }
+  else{
+    form = `
   <form method="POST" action="/api/survey/${data.survey_id}/question/${data.id}/expected" class="flex flex-col"> 
   <label for="option_${data.id}">${data.question}</label>
   <div class="flex">
@@ -79,8 +92,7 @@ const createOptionQuestion = (data) => {
     <button type="button" class="block bg-red-400 text-white font-bold py-2 px-4 rounded" onclick="createOption('${data.id}','${data.type}')">Add Option</button>
   </div>
   </form>`
-
-
+  }
   $('#preview_question').append(form);
 };
 
@@ -92,10 +104,15 @@ const createOption = (id,type) => {
     data: {option: option},
     dataType: 'json',
   }).done(function(data){
-    $('label[for="option_'+id+'"]').after(`<div class="flex">
+    if(type=='select'){
+      $('select[id="option_select_'+id+'"]').append(`<option value="${data.id}">${data.option}</option>`);
+    }
+    else{
+      $('label[for="option_'+id+'"]').after(`<div class="flex">
     <input type="${type}" name="expected" id="expected" value="${data.id}" class="border border-gray-500 rounded-md shadow-md">
     <label for="expected">${data.option}</label>
     </div>`);
+    }
   }).fail(function(data){
     console.log(data.responseJSON);
   });
