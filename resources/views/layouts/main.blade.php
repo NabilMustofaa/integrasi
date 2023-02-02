@@ -24,6 +24,8 @@
 
   @vite('resources/js/app.js')
   <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
-  <script src="{{ asset('js/dashboard.js') }}"></script>
+
+  @yield('scripts')
+  
 </body>
 </html>

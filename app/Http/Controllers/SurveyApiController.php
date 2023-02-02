@@ -27,6 +27,8 @@ class SurveyApiController extends Controller
         $survey = Survey::create([
             'name' => $request->name,
             'description' => $request->description,
+            'survey_category_id' => $request->survey_category_id,
+            'created_by' => 1,
         ]);
 
         return response()->json($survey, 201);

@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\QuestionOptionApiController;
+use App\Http\Controllers\SurveyApiController;
+use App\Http\Controllers\SurveyQuestionApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,9 +22,28 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::prefix('survey')->group(function () {
+    // survey
     Route::get('/', [SurveyApiController::class, 'index'])->name('survey.index');
     Route::post('/', [SurveyApiController::class, 'store'])->name('survey.store');
     Route::get('/{survey}', [SurveyApiController::class, 'show'])->name('survey.show');
     Route::put('/{survey}', [SurveyApiController::class, 'update'])->name('survey.update');
     Route::delete('/{survey}', [SurveyApiController::class, 'destroy'])->name('survey.destroy');
+
+    // survey question
+    Route::get('/{survey}/question', [SurveyQuestionApiController::class, 'index'])->name('survey.question.index');
+    Route::post('/{survey}/question', [SurveyQuestionApiController::class, 'store'])->name('survey.question.store');
+    Route::get('/{survey}/question/{surveyQuestion}', [SurveyQuestionApiController::class, 'show'])->name('survey.question.show');
+    Route::put('/{survey}/question/{surveyQuestion}', [SurveyQuestionApiController::class, 'update'])->name('survey.question.update');
+    Route::delete('/{survey}/question/{surveyQuestion}', [SurveyQuestionApiController::class, 'destroy'])->name('survey.question.destroy');
 });
+
+Route::prefix('question')->group(function () {
+    // question option
+    Route::get('/{surveyQuestion}/option', [QuestionOptionApiController::class, 'index'])->name('question.option.index');
+    Route::post('/{surveyQuestion}/option', [QuestionOptionApiController::class, 'store'])->name('question.option.store');
+    Route::get('/{surveyQuestion}/option/{questionOption}', [QuestionOptionApiController::class, 'show'])->name('question.option.show');
+    Route::put('/{surveyQuestion}/option/{questionOption}', [QuestionOptionApiController::class, 'update'])->name('question.option.update');
+    Route::delete('/{surveyQuestion}/option/{questionOption}', [QuestionOptionApiController::class, 'destroy'])->name('question.option.destroy');
+});
+
+

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SurveyCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SurveyController extends Controller
 {
@@ -15,6 +16,7 @@ class SurveyController extends Controller
     public function create()
     {
         $categories = SurveyCategory::all();
-        return view('survey.create', compact('categories'));
+        $types=['text', 'number', 'date', 'time', 'datetime', 'email', 'tel', 'url', 'radio', 'checkbox', 'select', 'textarea'];
+        return view('survey.create', compact('categories', 'types'));
     }
 }
