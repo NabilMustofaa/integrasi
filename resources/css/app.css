@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .active {
+    @apply bg-gray-100 rounded-md border border-gray-100;
+  }
+
+  .card {
+    @apply bg-red-400 rounded-md shadow-md text-white;
+  }
+}
+
