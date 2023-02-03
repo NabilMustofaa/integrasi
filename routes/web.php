@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\QualityAssuranceTeamController;
+use App\Http\Controllers\SalesTeamController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Support\Facades\Route;
@@ -22,11 +24,20 @@ Route::get('/', function () {
 Route::prefix('survey')->group(function () {
     Route::get('/', [SurveyController::class, 'index'])->name('survey.index');
     Route::get('/create', [SurveyController::class, 'create'])->name('survey.create');
+    Route::get('/one', [SurveyController::class, 'onePage'])->name('survey.one-page');
 });
 
 Route::prefix('store')->group(function () {
     Route::get('/', [StoreController::class, 'index'])->name('store.index');
     Route::get('/create', [StoreController::class, 'create'])->name('store.create');
     Route::post('/', [StoreController::class, 'store'])->name('store.store');
+});
+
+Route::prefix('qa')->group(function () {
+    Route::get('/', [QualityAssuranceTeamController::class, 'index'])->name('qa.index');
+});
+
+Route::prefix('sales')->group(function () {
+    Route::get('/', [SalesTeamController::class, 'index'])->name('sales.index');
 });
 

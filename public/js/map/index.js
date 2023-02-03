@@ -36,6 +36,13 @@ $.ajax({
             "address",
             "sales",
             "phone",
+
+            {dataField: "id", caption: "ID", width: 100},
+            {dataField: "name", caption: "Store Name"},
+            {dataField: "address", caption: "Store Address"},
+            {dataField: "sales", groupIndex: 0, caption: "Sales"},
+            {dataField: "phone", caption: "Store Phone"},
+
           ],
           selection: { mode: "single" },
           onSelectionChanged: function(e) {

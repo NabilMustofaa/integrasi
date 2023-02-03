@@ -19,4 +19,11 @@ class SurveyController extends Controller
         $types=['text', 'number', 'date', 'time', 'datetime', 'email', 'tel', 'url', 'radio', 'checkbox', 'select', 'textarea'];
         return view('survey.create', compact('categories', 'types'));
     }
+
+    public function onePage()
+    {
+        $categories = SurveyCategory::all();
+        $types=['text', 'number', 'date', 'time', 'datetime', 'email', 'tel', 'url', 'radio', 'checkbox', 'select', 'textarea'];
+        return view('SurveyOnePage.index', compact('categories', 'types'));
+    }
 }

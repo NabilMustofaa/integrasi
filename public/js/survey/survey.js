@@ -60,7 +60,7 @@ const createBasicQuestion = (data) => {
   <div class="flex gap-2">
   <label class="text-lg font-bold my-auto" for="expected">${data.question}</label>
   <button type="button"class="text-red-400 underline" onclick="deleteQuestion(${data.survey_id},${data.id})">Delete</button>
-  <button type="button" class="text-red-400 underline" onclick="saveExpected(${data.survey_id},${data.id})">Save Expected</button>
+  
   </div>
   <input type="${data.type}" name="expected" id="expected" class="border border-gray-500 rounded-md shadow-md">
   </form>`;
@@ -76,7 +76,7 @@ const createOptionQuestion = (data) => {
     <div class="flex gap-2">
       <label class="text-lg font-bold my-auto" for="option_${data.id}">${data.question}</label>
       <button type="button"class="text-red-400 underline" onclick="deleteQuestion(${data.survey_id},${data.id})">Delete</button>
-      <button type="button" class="text-red-400 underline" onclick="saveExpected(${data.survey_id},${data.id})">Save Expected</button>
+      
     </div>
     <select name="question_option_id" id="option_select_${data.id}" class="border border-gray-500 rounded-md shadow-md">
     </select>
@@ -94,7 +94,7 @@ const createOptionQuestion = (data) => {
 
       <button type="button" class="text-red-400 underline" onclick="deleteQuestion(${data.survey_id},${data.id})">Delete</button>
 
-      <button type="button" class="text-red-400 underline" onclick="saveExpected(${data.survey_id},${data.id})">Save Expected</button>
+      
 
     </div>
   <div class="flex">

@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\ExpectedAnswerApiController;
+use App\Http\Controllers\QualityAssuranceTeamApiController;
 use App\Http\Controllers\QuestionOptionApiController;
+use App\Http\Controllers\SalesTeamApiController;
 use App\Http\Controllers\StoreApiController;
 use App\Http\Controllers\SurveyApiController;
 use App\Http\Controllers\SurveyQuestionApiController;
+use App\Models\QualityAssuranceTeam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -55,5 +58,22 @@ Route::prefix('question')->group(function () {
 Route::prefix('store')->group(function () {
     Route::get('/', [StoreApiController::class, 'index'])->name('store.index');
     
+});
+
+Route::prefix('qa')->group(function () {
+    Route::get('/', [QualityAssuranceTeamApiController::class, 'index'])->name('qa.index');
+    Route::post('/', [QualityAssuranceTeamApiController::class, 'store'])->name('qa.store');
+    Route::get('/{qualityAssuranceTeam}', [QualityAssuranceTeamApiController::class, 'show'])->name('qa.show');
+    Route::put('/{qualityAssuranceTeam}', [QualityAssuranceTeamApiController::class, 'update'])->name('qa.update');
+    Route::delete('/{qualityAssuranceTeam}', [QualityAssuranceTeamApiController::class, 'destroy'])->name('qa.destroy');
+
+});
+
+Route::prefix('sales')->group(function () {
+    Route::get('/', [SalesTeamApiController::class, 'index'])->name('sales.index');
+    Route::post('/', [SalesTeamApiController::class, 'store'])->name('sales.store');
+    Route::get('/{salesTeam}', [SalesTeamApiController::class, 'show'])->name('sales.show');
+    Route::put('/{salesTeam}', [SalesTeamApiController::class, 'update'])->name('sales.update');
+    Route::delete('/{salesTeam}', [SalesTeamApiController::class, 'destroy'])->name('sales.destroy');
 });
 

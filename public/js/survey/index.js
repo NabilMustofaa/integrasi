@@ -15,9 +15,6 @@ const editButton = {
 
       let options = [];
       for (let i = 0; i < data.options.length; i++) {
-        if(data.options[i].id == data.expected[0].question_option_id){
-          data.expected_answer = i;
-        }
         options.push(data.options[i].option);
       }
       
@@ -30,15 +27,22 @@ const editButton = {
             $("<div>").dxTextBox({
               value: data.question,
             }),
-            // option radio button set text
+          );
+          console.log(data.type,options);
+          if (data.type === "radio") {
             $("<div>").dxRadioGroup({
               items: options,
-              value: options[data.expected_answer],
-            }),
-
-           
-            
-          );
+            }).appendTo(contentElement);
+          }
+          else if (data.type === "checkbox") {
+            for (let i = 0; i < options.length; i++) {
+              $("<div>").dxCheckBox({
+                text: options[i],
+                name: 'checkbox'
+              }).appendTo(contentElement);
+            }
+          }
+          
 
         }
       });

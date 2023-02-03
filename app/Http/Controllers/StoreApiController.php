@@ -17,6 +17,7 @@ class StoreApiController extends Controller
     {
         $stores=DB::SELECT('
         SELECT 
+            stores.id,
             stores.name,
             stores.phone,
             stores.address,
