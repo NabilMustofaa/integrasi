@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExpectedAnswerApiController;
 use App\Http\Controllers\QuestionOptionApiController;
 use App\Http\Controllers\StoreApiController;
 use App\Http\Controllers\SurveyApiController;
@@ -45,6 +46,10 @@ Route::prefix('question')->group(function () {
     Route::get('/{surveyQuestion}/option/{questionOption}', [QuestionOptionApiController::class, 'show'])->name('question.option.show');
     Route::put('/{surveyQuestion}/option/{questionOption}', [QuestionOptionApiController::class, 'update'])->name('question.option.update');
     Route::delete('/{surveyQuestion}/option/{questionOption}', [QuestionOptionApiController::class, 'destroy'])->name('question.option.destroy');
+
+    // expected answer
+    Route::get('/{surveyQuestion}/expected', [ExpectedAnswerApiController::class, 'index'])->name('question.expected.index');
+    Route::post('/{surveyQuestion}/expected', [ExpectedAnswerApiController::class, 'store'])->name('question.expected.store');
 });
 
 Route::prefix('store')->group(function () {

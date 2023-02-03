@@ -16,5 +16,20 @@ class SurveyQuestion extends Model
         'created_by',
     ];
 
+    public function survey()
+    {
+        return $this->belongsTo(Survey::class);
+    }
+
+    public function options()
+    {
+        return $this->hasMany(QuestionOption::class, 'survey_question_id');
+    }
+
+    public function expected()
+    {
+        return $this->hasMany(ExpectedAnswer::class, 'survey_question_id');
+    }
+
     
 }

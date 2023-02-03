@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('expected_answers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('survey_question_id')->constrained('survey_questions');
-            $table->foreignId('question_option_id')->constrained('question_options')->nullable();
+            $table->foreignId('question_option_id')->nullable()->constrained('question_options');
             $table->string('answer')->nullable();
             $table->timestamps();
             $table->foreignId('created_by')->constrained('users');

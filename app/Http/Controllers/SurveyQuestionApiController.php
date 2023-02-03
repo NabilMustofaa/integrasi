@@ -32,7 +32,7 @@ class SurveyQuestionApiController extends Controller
 
         return response()->json($question, 201);
     }
-    function show (SurveyQuestion $surveyQuestion){
+    function show (Survey $survey, SurveyQuestion $surveyQuestion){
         $option = $surveyQuestion->options;
         $expected = $surveyQuestion->expected;
         $surveyQuestion["options"]=$option;
@@ -59,7 +59,7 @@ class SurveyQuestionApiController extends Controller
         return response()->json($surveyQuestion, 200);
     }
 
-    function destroy (SurveyQuestion $surveyQuestion) {
+    function destroy (Survey $survey,SurveyQuestion $surveyQuestion) {
         $surveyQuestion->delete();
         return response()->json([
             'message' => 'Question deleted successfully',

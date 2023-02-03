@@ -4,12 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Survey;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SurveyApiController extends Controller
 {
     public function index ()
     {
-        $surveys = Survey::all();
+        $surveys = DB::SELECT(
+            'SELECT 
+                surveys.id,
+                surveys.name, 
+                surveys.description, 
+                survey_questions.question,
+                survey_questions.type,
+                survey_questions.id as question_id
+            FROM surveys 
+            LEFT JOIN survey_questions ON survey_questions.survey_id = surveys.id
+            '
+        );
         return response()->json($surveys, 200);
     }
     public function store(Request $request)

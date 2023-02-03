@@ -1,5 +1,3 @@
-
-
 const formSurvey=$('#form_survey');
 formSurvey.on('submit', function(e){
   e.preventDefault();
@@ -12,8 +10,6 @@ formSurvey.on('submit', function(e){
     console.log(data);
     $('#survey_question').toggleClass('hidden');
     $('#form_survey_question').attr('action', `/api/survey/${data.id}/question`);
-    console.log($('#form_survey_question').attr('action'));
-    //change to update button
     $('#survey_button').children()[1].innerHTML='Update';
     formSurvey.on('submit', function(e){
       e.preventDefault();
@@ -43,8 +39,7 @@ formSurveyQuestion.on('submit', function(e){
     data: formSurveyQuestion.serialize(),
     dataType: 'json',
   }).done(function(data){
-    console.log(data.type, option.includes(data.type));
-    
+  
     if(option.includes(data.type)){
       createOptionQuestion(data);
     }
@@ -53,7 +48,7 @@ formSurveyQuestion.on('submit', function(e){
     }
 
     $('#form_survey_question').attr('action', `/api/survey/${data.survey_id}/question`);
-    console.log($('#form_survey_question').attr('action'));
+    
 
   }).fail(function(data){
     console.log(data.responseJSON);
@@ -61,8 +56,12 @@ formSurveyQuestion.on('submit', function(e){
 });
 
 const createBasicQuestion = (data) => {
-  let form=`<form method="POST" action="/api/survey/${data.survey_id}/question/${data.id}/expected" class="flex flex-col">
-  <label for="expected">${data.question}</label>
+  let form=`<form method="POST" action="/api/question/${data.id}/expected" class="flex flex-col" id="question_${data.id}">
+  <div class="flex gap-2">
+  <label class="text-lg font-bold my-auto" for="expected">${data.question}</label>
+  <button type="button"class="text-red-400 underline" onclick="deleteQuestion(${data.survey_id},${data.id})">Delete</button>
+  <button type="button" class="text-red-400 underline" onclick="saveExpected(${data.survey_id},${data.id})">Save Expected</button>
+  </div>
   <input type="${data.type}" name="expected" id="expected" class="border border-gray-500 rounded-md shadow-md">
   </form>`;
 
@@ -73,23 +72,34 @@ const createBasicQuestion = (data) => {
 const createOptionQuestion = (data) => {
   let form;
   if (data.type=='select'){
-    form = `<form method="POST" action="/api/survey/${data.survey_id}/question/${data.id}/expected" class="flex flex-col">
-    <label for="option_${data.id}">${data.question}</label>
-    <select name="expected" id="option_select_${data.id}" class="border border-gray-500 rounded-md shadow-md">
+    form = `<form method="POST" action="/api/question/${data.id}/expected" class="flex flex-col" id="question_${data.id}">
+    <div class="flex gap-2">
+      <label class="text-lg font-bold my-auto" for="option_${data.id}">${data.question}</label>
+      <button type="button"class="text-red-400 underline" onclick="deleteQuestion(${data.survey_id},${data.id})">Delete</button>
+      <button type="button" class="text-red-400 underline" onclick="saveExpected(${data.survey_id},${data.id})">Save Expected</button>
+    </div>
+    <select name="question_option_id" id="option_select_${data.id}" class="border border-gray-500 rounded-md shadow-md">
     </select>
     <div class="flex">
     <input type="text" name="option" id="option_${data.id}" class="border border-gray-500 rounded-md shadow-md">
-    <button type="button" class="block bg-red-400 text-white font-bold py-2 px-4 rounded" onclick="createOption('${data.id}','${data.type}')">Add Option</button>
+    <button type="button"class="text-red-400 underline" onclick="createOption('${data.id}','${data.type}')">Add Option</button>
     </div>
     </form>`;
   }
   else{
     form = `
-  <form method="POST" action="/api/survey/${data.survey_id}/question/${data.id}/expected" class="flex flex-col"> 
-  <label for="option_${data.id}">${data.question}</label>
+  <form method="POST" action="/api/question/${data.id}/expected" class="flex flex-col" id="question_${data.id}"> 
+  <div class="flex gap-2">
+      <label class="text-lg font-bold my-auto" for="option_${data.id}">${data.question}</label>
+
+      <button type="button" class="text-red-400 underline" onclick="deleteQuestion(${data.survey_id},${data.id})">Delete</button>
+
+      <button type="button" class="text-red-400 underline" onclick="saveExpected(${data.survey_id},${data.id})">Save Expected</button>
+
+    </div>
   <div class="flex">
     <input type="text" name="option" id="option_${data.id}" class="border border-gray-500 rounded-md shadow-md">
-    <button type="button" class="block bg-red-400 text-white font-bold py-2 px-4 rounded" onclick="createOption('${data.id}','${data.type}')">Add Option</button>
+    <button type="button"class="text-red-400 underline" onclick="createOption('${data.id}','${data.type}')">Add Option</button>
   </div>
   </form>`
   }
@@ -109,10 +119,37 @@ const createOption = (id,type) => {
     }
     else{
       $('label[for="option_'+id+'"]').after(`<div class="flex">
-    <input type="${type}" name="expected" id="expected" value="${data.id}" class="border border-gray-500 rounded-md shadow-md">
-    <label for="expected">${data.option}</label>
+    <input type="${type}" name="question_option_id" value="${data.id}" class="border border-gray-500 rounded-md shadow-md">
+    <label class="text-lg font-bold my-auto" for="expected">${data.option}</label>
     </div>`);
     }
+  }).fail(function(data){
+    console.log(data.responseJSON);
+  });
+};
+
+const deleteQuestion = (survey_id,id) => {
+  $.ajax({
+    url: `/api/survey/${survey_id}/question/${id}`,
+    type: 'DELETE',
+  })
+  .done(function(data){
+    $('#question_'+id).remove();
+  })
+  .fail(function(data){});
+};
+
+const saveExpected = (survey_id,id) => {
+  const form=$('#question_'+id);
+  $.ajax({
+    url: form.attr('action'),
+    type: form.attr('method'),
+    data: form.serialize(),
+    dataType: 'json',
+  }).done(function(data){
+    console.log(data);
+    //set the button to green
+    $('button[onclick="saveExpected('+survey_id+','+id+')"]').addClass('text-green-400').removeClass('text-red-400');
   }).fail(function(data){
     console.log(data.responseJSON);
   });

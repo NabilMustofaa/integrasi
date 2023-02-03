@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('option');
             $table->foreignId('survey_question_id')->constrained('survey_questions');
+            $table->boolean('is_correct')->default(false);
             $table->timestamps();
             $table->foreignId('created_by')->constrained('users');
         });

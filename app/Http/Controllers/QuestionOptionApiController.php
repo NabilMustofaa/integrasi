@@ -42,4 +42,10 @@ class QuestionOptionApiController extends Controller
         
     }
 
+    function expected (QuestionOption $questionOption, Request $request) {
+        $questionOption->is_correct = $request->is_correct;
+        $questionOption->save();
+        return response()->json($questionOption, 200);
+    }
+
 }
