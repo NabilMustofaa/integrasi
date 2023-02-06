@@ -1,4 +1,3 @@
-
 const editButton = {
   icon: "edit",
   onClick: function (e) {
@@ -9,50 +8,67 @@ const editButton = {
       url: `/api/survey/${data.id}/question/${data.question_id}`,
       type: "GET",
       dataType: "json",
-
     }).done(function (data) {
       console.log(data);
-
-      let options = [];
-      for (let i = 0; i < data.options.length; i++) {
-        options.push(data.options[i].option);
-      }
       
-      // set the data as an option in the contentTemplate
       $("#popup").dxPopup({
         title: "Edit Survey",
-        data: data,
-        contentTemplate: function (contentElement) {
-          contentElement.append(
-            $("<div>").dxTextBox({
-              value: data.question,
-            }),
-          );
-          console.log(data.type,options);
-          if (data.type === "radio") {
-            $("<div>").dxRadioGroup({
-              items: options,
-            }).appendTo(contentElement);
-          }
-          else if (data.type === "checkbox") {
-            for (let i = 0; i < options.length; i++) {
-              $("<div>").dxCheckBox({
-                text: options[i],
-                name: 'checkbox'
-              }).appendTo(contentElement);
-            }
-          }
-          
-
-        }
+        contentTemplate: popupContentTemplate(data),
+        showTitle: true,
+        width: 400,
+        height: 350,
+        hideOnOutsideClick: true,
       });
-      //c
-      // show the popup
       $("#popup").dxPopup("instance").show();
-
-
     });
   }
+};
+
+const popupContentTemplate = function (data) {
+  let optionParent = $('<div>').addClass('flex flex-col')
+
+  const optionElement = (type,option,expected=false) => {
+    return $('<div>').addClass('flex').append(
+      $('<input>').attr('type', type).attr('name', 'option').attr('checked',expected),
+      $('<input>').attr('type', 'text').attr('name', 'option').addClass('border border-gray-300 rounded-md p-2').val(option),
+      $("<button>").attr('type', 'submit').attr('id', 'edit_option').addClass('bg-blue-500 text-white rounded-md px-4 ml-2').text("Delete Option"),
+    )
+  };
+
+  let expect = data.expected.length != 0 ? true : false;
+  
+  if(data.options.length != 0){
+    data.options.forEach((option) => {
+      if (expect == true){
+        data.expected.forEach((expected) => {
+          if(option.id == expected.question_option_id){
+            optionParent.append(
+              optionElement(data.type,option.option,true)
+            )
+          }
+          else{
+            optionParent.append(
+              optionElement(data.type,option.option,false)
+            )
+          }
+        })
+      }
+      else{
+        optionParent.append(
+          optionElement(data.type,option.option,false)
+        )
+      }
+    })
+  }
+
+
+  return $('<form>').attr('id', 'survey_edit').append(
+    $('<div>').addClass('flex').append(
+      $('<input>').attr('type', 'text').attr('name', 'question').addClass('border border-gray-300 rounded-md p-2').val(data.question),
+      $('<button>').attr('type', 'submit').attr('id', 'edit_question').addClass('bg-blue-500 text-white rounded-md px-4 ml-2').text('Save Question')
+    ),
+    optionParent,
+  );
 };
 
 const deleteButton = {
@@ -62,33 +78,18 @@ const deleteButton = {
   }
 };
 
-$(function () {
-  $("#popup").dxPopup({
-    title: "Edit Survey",
-    //paramter to receive data from grid
-    contentTemplate: function (contentElement) {
-      contentElement.append(
-        $("<div>").dxTextBox({
-          value: contentElement.model.data.name,
-        })
-      );
-    }
-  });
- 
-});
+
 
 $.ajax({
     url: '/api/survey',
     type: 'GET',
     dataType: 'json',
-
 }).done (function(data) {
     surveys = data;
     $(function () {
       $("#dataGrid").dxDataGrid({
           dataSource: surveys,
           columns: [
-            //don't show the id column but use as group
             {dataField: "id", dataType: "number", allowEditing: false, groupIndex: 0},
             {dataField: "question_id", dataType: "number", allowEditing: false,visible: false},
             {dataField: "name", dataType: "string", allowEditing: false},
@@ -99,15 +100,9 @@ $.ajax({
               type: "buttons",
               buttons: [editButton, deleteButton],
               width: 100,
-
             }
           ],
-
-         
-          
-
       });
     });
- 
 });
 

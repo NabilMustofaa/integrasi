@@ -42,7 +42,7 @@ const editButton = {
       height: 350,
       visible: false,
       dragEnabled: false,
-      closeOnOutsideClick: true,
+      hideOnOutsideClick: true,
     }).dxPopup('instance');
     popup.show();
     $('#edit').on('click', function (e) {
@@ -140,7 +140,7 @@ sales_add.on('click', function () {
     height: 350,
     visible: false,
     dragEnabled: false,
-    closeOnOutsideClick: true,
+    hideOnOutsideClick: true,
   }).dxPopup('instance');
   popup.show();
 });
