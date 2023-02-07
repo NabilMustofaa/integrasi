@@ -3,7 +3,8 @@
 use App\Http\Controllers\QualityAssuranceTeamController;
 use App\Http\Controllers\SalesTeamController;
 use App\Http\Controllers\StoreController;
-use App\Http\Controllers\SurveyController;
+use App\Http\Controllers\SurveyController; 
+use App\Http\Controllers\SurveyPlanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,5 +40,10 @@ Route::prefix('qa')->group(function () {
 
 Route::prefix('sales')->group(function () {
     Route::get('/', [SalesTeamController::class, 'index'])->name('sales.index');
+});
+
+Route::prefix('plan')->group(function () {
+    Route::get('/', [SurveyPlanController::class, 'index'])->name('plan.index');
+    Route::get('/create', [SurveyPlanController::class, 'create'])->name('plan.create');
 });
 

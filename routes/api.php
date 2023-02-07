@@ -6,6 +6,7 @@ use App\Http\Controllers\QuestionOptionApiController;
 use App\Http\Controllers\SalesTeamApiController;
 use App\Http\Controllers\StoreApiController;
 use App\Http\Controllers\SurveyApiController;
+use App\Http\Controllers\SurveyPlanApiController;
 use App\Http\Controllers\SurveyQuestionApiController;
 use App\Models\QualityAssuranceTeam;
 use Illuminate\Http\Request;
@@ -75,5 +76,9 @@ Route::prefix('sales')->group(function () {
     Route::get('/{salesTeam}', [SalesTeamApiController::class, 'show'])->name('sales.show');
     Route::put('/{salesTeam}', [SalesTeamApiController::class, 'update'])->name('sales.update');
     Route::delete('/{salesTeam}', [SalesTeamApiController::class, 'destroy'])->name('sales.destroy');
+});
+
+Route::prefix('plans')->group(function () {
+    Route::get('/', [SurveyPlanApiController::class, 'index'])->name('plan.index');
 });
 
