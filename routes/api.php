@@ -46,9 +46,9 @@ Route::prefix('question')->group(function () {
     // question option
     Route::get('/{surveyQuestion}/option', [QuestionOptionApiController::class, 'index'])->name('question.option.index');
     Route::post('/{surveyQuestion}/option', [QuestionOptionApiController::class, 'store'])->name('question.option.store');
-    Route::get('/{surveyQuestion}/option/{questionOption}', [QuestionOptionApiController::class, 'show'])->name('question.option.show');
-    Route::put('/{surveyQuestion}/option/{questionOption}', [QuestionOptionApiController::class, 'update'])->name('question.option.update');
-    Route::delete('/{surveyQuestion}/option/{questionOption}', [QuestionOptionApiController::class, 'destroy'])->name('question.option.destroy');
+    Route::get('/option/{questionOption}', [QuestionOptionApiController::class, 'show'])->name('question.option.show');
+    Route::put('/option/{questionOption}', [QuestionOptionApiController::class, 'update'])->name('question.option.update');
+    Route::delete('/option/{questionOption}', [QuestionOptionApiController::class, 'destroy'])->name('question.option.destroy');
 
     // expected answer
     Route::get('/{surveyQuestion}/expected', [ExpectedAnswerApiController::class, 'index'])->name('question.expected.index');

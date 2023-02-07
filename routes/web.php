@@ -4,6 +4,7 @@ use App\Http\Controllers\QualityAssuranceTeamController;
 use App\Http\Controllers\SalesTeamController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\SurveyController;
+use App\Http\Controllers\SurveyNewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,7 +25,8 @@ Route::get('/', function () {
 Route::prefix('survey')->group(function () {
     Route::get('/', [SurveyController::class, 'index'])->name('survey.index');
     Route::get('/create', [SurveyController::class, 'create'])->name('survey.create');
-    Route::get('/one', [SurveyController::class, 'onePage'])->name('survey.one-page');
+    Route::get('/new', [SurveyNewController::class, 'index'])->name('survey.new.index');
+    Route::get('/new/{survey}/edit', [SurveyNewController::class, 'edit'])->name('survey.new.show');
 });
 
 Route::prefix('store')->group(function () {

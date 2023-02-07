@@ -25,7 +25,7 @@
     <div class="w-1/6">
       @include('partials.sidebar')
     </div>
-    <div class="w-5/6 mt-16 p-12">
+    <div class="w-5/6 p-12 pt-20 h-screen overflow-auto" id="main_content">
       @yield('content')
     </div>
 
