@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\QuestionOption;
 use App\Models\Survey;
 use App\Models\SurveyQuestion;
 use Illuminate\Http\Request;
+use PhpOption\Option;
 
 class SurveyQuestionApiController extends Controller
 {
@@ -41,7 +43,7 @@ class SurveyQuestionApiController extends Controller
 
 
     }
-    function update (SurveyQuestion $surveyQuestion, Request $request) {
+    function update (Survey $survey, SurveyQuestion $surveyQuestion, Request $request) {
         if ($request->type == null) {
             return response()->json([
                 'message' => 'type is required',
@@ -60,6 +62,8 @@ class SurveyQuestionApiController extends Controller
     }
 
     function destroy (Survey $survey,SurveyQuestion $surveyQuestion) {
+
+        $surveyQuestion->options()->delete();
         $surveyQuestion->delete();
         return response()->json([
             'message' => 'Question deleted successfully',

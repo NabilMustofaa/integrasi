@@ -15,4 +15,14 @@ class Survey extends Model
         'created_by',
         'survey_category_id',
     ];
+
+    public function surveyCategory()
+    {
+        return $this->belongsTo(SurveyCategory::class);
+    }
+
+    public function surveyQuestions()
+    {
+        return $this->hasMany(SurveyQuestion::class, 'survey_id', 'id');
+    }
 }

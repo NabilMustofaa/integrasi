@@ -1,6 +1,6 @@
 <div class="flex flex-col border border-gray-100 shadow-sm h-screen">
   <div class="flex h-16 align-middle w-full">
-    <h3 class=" text-lg text-center !font-bold my-auto w-full font-mono"> Project Integrasi </h3>
+    <h3 class=" text-lg text-center !font-bold my-auto w-full font-sans"> Project Integrasi </h3>
   </div>
   <div>
     <div class=" px-4 py-6">

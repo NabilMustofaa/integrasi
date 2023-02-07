@@ -12,6 +12,19 @@ var map = new mapboxgl.Map({
     attributionControl: false
 });
 
+map.on('load', async function () {
+    await map.on('click', setLocation);
+});
+
+async function setLocation(e) {
+    var coordinates = e.lngLat;
+    var longitude = coordinates.lng;
+    var latitude = coordinates.lat;
+    $('input[name="longitude"]').val(longitude);
+    $('input[name="latitude"]').val(latitude);
+    flyToStore(longitude, latitude);
+}    
+
 $('input[name="longitude"]').on('change', function() {
     var lon = $(this).val();
     var lat = $('input[name="latitude"]').val();
