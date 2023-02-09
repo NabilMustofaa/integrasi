@@ -23,9 +23,14 @@ class StoreApiController extends Controller
             stores.address,
             sales_teams.name AS sales,
             stores.longitude,
-            stores.latitude
+            stores.latitude,
+            max(survey_plans.date) AS last_survey
         FROM stores
-        INNER JOIN sales_teams ON stores.sales_team_id = sales_teams.id');
+        INNER JOIN sales_teams ON stores.sales_team_id = sales_teams.id
+        LEFT JOIN survey_plans ON stores.id = survey_plans.store_id
+        GROUP BY stores.id,sales_teams.name
+
+        ');
         return response()->json($stores);
     }
 

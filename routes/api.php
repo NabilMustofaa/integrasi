@@ -80,5 +80,6 @@ Route::prefix('sales')->group(function () {
 
 Route::prefix('plans')->group(function () {
     Route::get('/', [SurveyPlanApiController::class, 'index'])->name('plan.index');
+    Route::post('/', [SurveyPlanApiController::class, 'store'])->name('plan.store');
 });
 

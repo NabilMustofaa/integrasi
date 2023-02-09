@@ -33,7 +33,7 @@
     <div class="flex">
       <input type="text" name="longitude" placeholder="Longitude" class="border p-2 w-2/5 my-2">
       <input type="text" name="latitude" placeholder="Latitude" class="border p-2 w-2/5 my-2">
-      <button type="button" class="bg-blue-500 text-white px-4 rounded font-medium w-1/5" id="get-location">Get Location</button>
+      <button type="button" class="bg-blue-500 text-white px-4 rounded font-medium w-1/5 my-2" id="get-location">Get Location</button>
     </div>
     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded font-medium">Submit</button>
 

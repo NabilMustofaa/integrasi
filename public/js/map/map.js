@@ -23,6 +23,15 @@ async function setLocation(e) {
     $('input[name="longitude"]').val(longitude);
     $('input[name="latitude"]').val(latitude);
     flyToStore(longitude, latitude);
+
+    $.ajax({
+        url: `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?types=poi&access_token=${mapboxgl.accessToken}`,
+    }).done(function (data) {
+        var address = data.features[0].place_name;
+        $('input[name="address"]').val(address);
+    });
+
+
 }    
 
 $('input[name="longitude"]').on('change', function() {

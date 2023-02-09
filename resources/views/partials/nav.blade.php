@@ -1,4 +1,4 @@
-<div class=" flex h-16 border border-gray-100 shadow-sm justify-end absolute top-0 w-screen">
+<div class=" flex h-16 border bg-white border-gray-100 shadow-sm justify-end absolute top-0 w-screen">
   <button class=" flex justify-between content-center m-2 px-2 py-2 gap-4 hover:bg-gray-100 hover:rounded-md dropdown" id="profile">
     <img class="h-6 w-6 rounded-full my-auto" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/800px-Image_created_with_a_mobile_phone.png" alt="" >
     <a class=" my-auto" href="#">Nabil</a>
