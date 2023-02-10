@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BranchApiController;
 use App\Http\Controllers\ExpectedAnswerApiController;
 use App\Http\Controllers\QualityAssuranceTeamApiController;
 use App\Http\Controllers\QuestionOptionApiController;
@@ -81,5 +82,17 @@ Route::prefix('sales')->group(function () {
 Route::prefix('plans')->group(function () {
     Route::get('/', [SurveyPlanApiController::class, 'index'])->name('plan.index');
     Route::post('/', [SurveyPlanApiController::class, 'store'])->name('plan.store');
+
+    Route::post('/{surveyPlan}/snapshot', [SurveyPlanApiController::class, 'storeSnapshot'])->name('plan.snapshot.store');
 });
 
+
+Route::prefix('branch')->group(function () {
+    Route::get('/', [BranchApiController::class, 'index'])->name('branch.index');
+    Route::post('/', [BranchApiController::class, 'store'])->name('branch.store');
+    Route::get('/{branch}', [BranchApiController::class, 'show'])->name('branch.show');
+    Route::put('/{branch}', [BranchApiController::class, 'update'])->name('branch.update');
+    Route::delete('/{branch}', [BranchApiController::class, 'destroy'])->name('branch.destroy');
+
+    Route::get('/qa/{id}', [BranchApiController::class, 'getBranchByQualityAssuranceTeamId'])->name('branch.qa');
+});

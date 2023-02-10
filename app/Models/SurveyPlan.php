@@ -14,5 +14,13 @@ class SurveyPlan extends Model
         'store_id',
         'quality_assurance_team_id',
         'date',
+        'photo',
+        'longitude',
+        'latitude',
     ];
+
+    public function survey()
+    {
+        return $this->belongsTo(Survey::class, 'survey_id');
+    }
 }

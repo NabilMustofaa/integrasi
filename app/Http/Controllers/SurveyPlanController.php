@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SurveyPlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -28,5 +29,13 @@ class SurveyPlanController extends Controller
             FROM quality_assurance_teams
         ');
         return view('plan.create', compact('surveys','qualityAssuranceTeams'));
+    }
+
+    public function show (SurveyPlan $plan)
+    {
+        $survey = $plan->survey;
+        $category = $survey->surveyCategory;
+        $questions = $survey->surveyQuestions;
+        return view('plan.show', compact('plan','survey','category','questions'));
     }
 }

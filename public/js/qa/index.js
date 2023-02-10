@@ -16,8 +16,9 @@ const dataGridInstance = () => {
       {dataField: 'name', caption: 'Quality Assurance Name'},
       {dataField: 'phone', caption: 'Quality Assurance Phone'},
       {dataField: 'address', caption: 'Quality Assurance Address'},
+      {dataField: 'branch_name', caption: 'Branch Name'},
       {
-        type: "buttons",
+        dataType: 'Button',
         buttons: [editButton, deleteButton],
         width: 100,
       }
@@ -76,6 +77,26 @@ const deleteButton = {
       dataGridInstance();
     })
   }
+}
+
+const branchSelect = function (selected=null) {
+  $.ajax({
+    url: '/api/branch',
+    type: 'GET',
+    dataType: 'json',
+  }).done(function (data) {
+    let select = $('#branch');
+    console.log(data);
+    data.forEach(function (item) {
+      if(selected == item.id){
+        select.append($('<option>').attr('value', item.id).text(item.name).attr('selected', 'selected'));
+      }else{
+        select.append($('<option>').attr('value', item.id).text(item.name));
+      }
+    })
+  })
+
+  return $('<select>').attr('name', 'branch_id').attr('id', 'branch').addClass('border border-gray-300 rounded-md p-2 mb-2');
 };
 
 const popupContentTemplateWithEdit = function (data) {
@@ -91,6 +112,10 @@ const popupContentTemplateWithEdit = function (data) {
     $('<div>').addClass('flex flex-col').append(
       $('<label>').text('Quality Assurance Address').addClass('mb-2'),
       $('<input>').attr('type', 'text').attr('name', 'address').addClass('border border-gray-300 rounded-md p-2 mb-2 h-24').val(data.address),
+    ),
+    $('<div>').addClass('flex flex-col').append(
+      $('<label>').text('Branch').addClass('mb-2'),
+      branchSelect(data.branch_id),
     ),
     $('<button>').text('Edit').addClass('bg-blue-500 text-white p-2 rounded-md').attr('type', 'submit').attr('id', 'edit')
   );
@@ -109,6 +134,10 @@ const popupContentTemplate = function () {
     $('<div>').addClass('flex flex-col').append(
       $('<label>').text('Quality Assurance Address').addClass('mb-2'),
       $('<input>').attr('type', 'text').attr('name', 'address').addClass('border border-gray-300 rounded-md p-2 mb-2 h-24'),
+    ),
+    $('<div>').addClass('flex flex-col').append(
+      $('<label>').text('Branch').addClass('mb-2'),
+      branchSelect(),
     ),
     $('<button>').text('Create').addClass('bg-blue-500 text-white p-2 rounded-md').attr('type','submit').on('click', function (e) {
       e.preventDefault();

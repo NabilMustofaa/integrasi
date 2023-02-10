@@ -19,6 +19,9 @@ return new class extends Migration
             $table->foreignId('store_id')->constrained('stores');
             $table->foreignId('quality_assurance_team_id')->constrained('quality_assurance_teams');
             $table->date('date');
+            $table->string('photo')->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
+            $table->decimal('latitude', 10, 8)->nullable();
             $table->timestamps();
         });
     }

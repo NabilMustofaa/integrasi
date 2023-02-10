@@ -1,4 +1,4 @@
-const truckLocation = [112.696458, -7.354066];
+let truckLocation = [112.696458, -7.354066];
 const warehouseLocation = [112.696458, -7.354066];
 let storeLocation = [];
 let lastAtRestaurant = Date.now();
@@ -156,6 +156,32 @@ map.on("load", async function () {
         },
         "waterway-label"
     );
+
+    map.addSource('iso', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: []
+        }
+      });
+    
+      map.addLayer(
+        {
+          id: 'isoLayer',
+          type: 'fill',
+          // Use "iso" as the data source for this layer
+          source: 'iso',
+          layout: {
+          },
+          paint: {
+            // The fill color for the layer is set to a light purple
+            'fill-color': '#5a3fc0',
+            'fill-opacity': 0.1,
+            'fill-outline-color': '#5a3fc0',
+          }
+        },
+        'poi-label'
+      );
 });
 
 $.ajax({
@@ -177,7 +203,7 @@ $.ajax({
                     cellTemplate: function (container, options) {
                         return $("<input>")
                             .attr("type", "checkbox")
-                            .attr("id", "check_" + options.rowIndex)
+                            .attr("id", "check_" + options.data.id)
                             .attr("name", "check")
                             .attr("value", options.data.id)
                             .addClass("check")
@@ -213,13 +239,14 @@ $.ajax({
     });
     stores.forEach(function (store) {
         addMarker(store.longitude, store.latitude, store.id);
+        storeLocation.push([store.id, store.longitude, store.latitude]);
     });
 });
 
-function addMarker(lon, lat, id) {
+function addMarker(lon, lat, id,type = "store") {
     marker = document.createElement("div");
-    marker.className = "store-marker";
-    marker.id = "store-marker-" + id;
+    marker.className = `${type}-marker`;
+    marker.id = `${type}-marker-${id}`;
 
     marker.addEventListener("click", function (e) {
         console.log("clicked");
@@ -238,7 +265,7 @@ const flyToStore = (coordinates) => {
 async function newDropoff(coordinates, id = null) {
     if (id != null) {
         let marker = document.getElementById("store-marker-" + id);
-        marker.classList.toggle("hidden");
+        marker.classList.add('hidden')
     }
     lastAtRestaurant = lastAtRestaurant + 75000;
     // Store the clicked point as a new GeoJSON feature with
@@ -258,8 +285,21 @@ async function newDropoff(coordinates, id = null) {
 async function createRoute() {
     // Make a request to the Optimization API
     let newDropoff = turf.featureCollection([]);
+    if (dropoffs.features.length < 1) {
+        
+        return;
+    }
     const query = await fetch(assembleQueryURL(), { method: "GET" });
     const response = await query.json();
+ 
+    // Create an alert for any requests that return an error
+    if (response.code !== "Ok") {
+        // Remove invalid point
+
+        dropoffs.features.pop();
+        return;
+    }
+
     response.waypoints.forEach(function (item) {
         const pt = turf.point([item.location[0], item.location[1]], {
             orderTime: Date.now(),
@@ -268,20 +308,6 @@ async function createRoute() {
         newDropoff.features.push(pt);
     });
     updateDropoffs(newDropoff);
-
-    // Create an alert for any requests that return an error
-    if (response.code !== "Ok") {
-        const handleMessage =
-            response.code === "InvalidInput"
-                ? "Refresh to start a new route. For more information: https://docs.mapbox.com/api/navigation/optimization/#optimization-api-errors"
-                : "Try a different point.";
-        alert(`${response.code} - ${response.message}\n\n${handleMessage}`);
-
-        // Remove invalid point
-        dropoffs.features.pop();
-        delete pointHopper[pt.properties.key];
-        return;
-    }
 
     // give number for each store
     let storeNumber = 1;
@@ -328,7 +354,7 @@ function assembleQueryURL() {
 
 function removeDropoff(key) {
     let marker = document.getElementById("store-marker-" + key);
-    marker.classList.toggle("hidden");
+    marker.classList.remove("hidden");
     // Remove the point from the `pointHopper` object
     delete pointHopper[key];
     // Remove the point from the `dropoffs.features` array
@@ -386,3 +412,97 @@ function createNotification(message) {
         $("#notification").html("");
     }, 5000);
 }
+
+$.ajax({
+    url: '/api/branch',
+    type: 'GET',
+
+}).done(function (data) {
+    branchs = data;
+
+    branchs.forEach(function (item) {
+        console.log(item);
+        addMarker(item.longitude, item.latitude, item.id,"branch");
+    });
+});
+
+$('#quality_assurance_team_id').on('change', function () {
+    $.ajax({
+        url: '/api/branch/qa/' + $(this).val(),
+        type: 'GET',
+
+    }).done(function (data) {
+        flyToStore({lng: data[0].longitude, lat: data[0].latitude});
+        createIsochrone({lng: data[0].longitude, lat: data[0].latitude});
+    }).fail(function (data) {
+        console.log(data);
+    });
+});
+
+
+async function createIsochrone(coordinates) {
+
+    truckLocation = [coordinates.lng, coordinates.lat]
+    resetRouteandDropoffs();
+
+
+// Create constants to use in getIso()
+    const urlBase = 'https://api.mapbox.com/isochrone/v1/mapbox/';
+    const lon = coordinates.lng;
+    const lat = coordinates.lat;
+    const profile = 'driving'; // Set the default routing profile
+    const minutes = 10; // Set the default duration
+
+    // Create a function that sets up the Isochrone API query then makes an fetch call
+    const query = await fetch(
+        `${urlBase}${profile}/${lon},${lat}?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+        { method: 'GET' }
+    );
+  const data = await query.json();
+
+
+  storeLocation.forEach(function (item) {
+    const pt = turf.point([item[1], item[2]], {
+        orderTime: Date.now(),
+        key: item[0],
+    });
+  
+    if (turf.booleanPointInPolygon(pt, data.features[0].geometry)) {
+        let marker = document.getElementById("store-marker-" + item[0]);
+        marker.classList.add("hidden");
+        let check = document.getElementById("check_" + item[0]);
+        check.checked = true;
+        dropoffs.features.push(pt);
+        pointHopper[pt.properties.key] = pt;
+    }
+    else {
+        let marker = document.getElementById("store-marker-" + item[0]);
+        marker.classList.toggle("hidden");
+        let check = document.getElementById("check_" + item[0]);
+        check.checked = false;
+        removeDropoff(item[0]);
+    };
+    });
+    updateDropoffs(dropoffs);
+    createRoute();
+}
+
+function resetRouteandDropoffs() {
+    listClicked = document.querySelectorAll('.clicked');
+    markerClicked = document.querySelectorAll('.hidden');
+    for (let i = 0; i < listClicked.length; i++) {
+        listClicked[i].classList.add('clicked');
+        markerClicked[i].classList.add('hidden');
+    }
+    // Reset `dropoffs.features`
+    dropoffs.features = [];
+    // Clear the `pointHopper` object
+    pointHopper = {};
+    // Reset the `route` source by setting it to a GeoJSON feature collection
+    // with no features
+    map.getSource('route').setData(nothing);
+    // Remove all layers from the map
+
+    
+  }
+

@@ -6,6 +6,7 @@ use App\Models\SurveyPlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class SurveyPlanApiController extends Controller
 {
@@ -95,5 +96,27 @@ class SurveyPlanApiController extends Controller
     public function destroy(SurveyPlan $surveyPlan)
     {
         //
+    }
+
+    public function storeSnapshot(SurveyPlan $surveyPlan, Request $request)
+    {
+        $request->validate([
+            'file' => 'required',
+        ]);
+
+        $img= $request['file'];
+        $image_parts = explode(";base64,", $img);
+        $image_type_aux = explode("image/", $image_parts[0]);
+        $image_type = $image_type_aux[1];
+            
+        $image_base64 = base64_decode($image_parts[1]);
+        $current_date= date('YmdHis');
+        $file = 'snapshot/'.$surveyPlan->id.'-'.$current_date.'.png';
+        Storage::disk('public')->put($file, $image_base64);
+
+        
+        return response()->json([
+            'message' => 'Snapshot saved successfully',
+        ]);
     }
 }

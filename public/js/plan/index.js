@@ -12,6 +12,10 @@ $.ajax({
           {dataField: "store_name", caption: "Store Name"},
           {dataField: "date", caption: "Survey Date",groupIndex: 0},
           {dataField: "qa_name", caption: "QA Name", "groupIndex": 1},
+          {dataType: "Button", caption: "Action", width: 100, cellTemplate: function (container, options) {
+            var button = $("<a/>").addClass("btn btn-primary btn-sm").text("Fill Form").attr("href", "/plan/" + options.data.id);
+            container.append(button);
+          }}
         ],
         columnAutoWidth: true,
         showBorders: true,

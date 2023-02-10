@@ -19,6 +19,14 @@
             border-radius: 50%;
             cursor: pointer;
         }
+        .branch-marker {
+            background-color: #F6A623;
+
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
 
         .clicked {
             opacity: 0 !important;

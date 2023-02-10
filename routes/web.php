@@ -47,5 +47,6 @@ Route::prefix('sales')->group(function () {
 Route::prefix('plan')->group(function () {
     Route::get('/', [SurveyPlanController::class, 'index'])->name('plan.index');
     Route::get('/create', [SurveyPlanController::class, 'create'])->name('plan.create');
+    Route::get('/{plan}', [SurveyPlanController::class, 'show'])->name('plan.show');
 });
 

@@ -20,8 +20,10 @@ class QualityAssuranceTeamApiController extends Controller
             quality_assurance_teams.id,
             quality_assurance_teams.name,
             quality_assurance_teams.address,
-            quality_assurance_teams.phone
-        FROM quality_assurance_teams');
+            quality_assurance_teams.phone,
+            branches.name AS branch_name
+        FROM quality_assurance_teams
+        JOIN branches ON quality_assurance_teams.branch_id = branches.id');
         return response()->json($qa);
     }
 
@@ -46,6 +48,7 @@ class QualityAssuranceTeamApiController extends Controller
             'name' => 'required',
             'address' => 'required',
             'phone' => 'required',
+            'branch_id' => 'required',
         ]);
         $validated['created_by'] = 1;
         $qa = QualityAssuranceTeam::create($validated);

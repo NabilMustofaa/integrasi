@@ -14,5 +14,6 @@ class QualityAssuranceTeam extends Model
         'address',
         'phone',
         'created_by',
+        'branch_id'
     ];
 }
