@@ -6,10 +6,12 @@ use App\Http\Controllers\QualityAssuranceTeamApiController;
 use App\Http\Controllers\QuestionOptionApiController;
 use App\Http\Controllers\SalesTeamApiController;
 use App\Http\Controllers\StoreApiController;
+use App\Http\Controllers\SurveyAnswerApiController;
 use App\Http\Controllers\SurveyApiController;
 use App\Http\Controllers\SurveyPlanApiController;
 use App\Http\Controllers\SurveyQuestionApiController;
 use App\Models\QualityAssuranceTeam;
+use App\Models\SurveyAnswer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +33,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('survey')->group(function () {
     // survey
     Route::get('/', [SurveyApiController::class, 'index'])->name('survey.index');
+    Route::get('/hierarchy', [SurveyApiController::class, 'indexHierarchy'])->name('survey.indexHierarchy');
     Route::post('/', [SurveyApiController::class, 'store'])->name('survey.store');
     Route::get('/{survey}', [SurveyApiController::class, 'show'])->name('survey.show');
     Route::put('/{survey}', [SurveyApiController::class, 'update'])->name('survey.update');
@@ -55,6 +58,13 @@ Route::prefix('question')->group(function () {
     // expected answer
     Route::get('/{surveyQuestion}/expected', [ExpectedAnswerApiController::class, 'index'])->name('question.expected.index');
     Route::post('/{surveyQuestion}/expected', [ExpectedAnswerApiController::class, 'store'])->name('question.expected.store');
+
+    Route::put('/{surveyQuestion}/expected/{expectedAnswer}', [ExpectedAnswerApiController::class, 'update'])->name('question.expected.update');
+
+    Route::delete('/{surveyQuestion}/expected/{expectedAnswer}', [ExpectedAnswerApiController::class, 'destroy'])->name('question.expected.destroy');
+
+
+
 });
 
 Route::prefix('store')->group(function () {
@@ -83,7 +93,18 @@ Route::prefix('plans')->group(function () {
     Route::get('/', [SurveyPlanApiController::class, 'index'])->name('plan.index');
     Route::post('/', [SurveyPlanApiController::class, 'store'])->name('plan.store');
 
+    //snapshot
     Route::post('/{surveyPlan}/snapshot', [SurveyPlanApiController::class, 'storeSnapshot'])->name('plan.snapshot.store');
+
+    //answer
+    Route::prefix('/{surveyPlan}/question/{surveyQuestion}')->group(function () {
+        Route::post('/answer', [SurveyAnswerApiController::class, 'store'])->name('question.answer.store');
+        Route::get('/answer', [SurveyAnswerApiController::class, 'index'])->name('question.answer.index');
+        Route::put('/answer/{surveyAnswer}', [SurveyAnswerApiController::class, 'update'])->name('question.answer.update');
+        Route::delete('/answer/{surveyAnswer}', [SurveyAnswerApiController::class, 'destroy'])->name('question.answer.destroy');
+    });
+
+
 });
 
 

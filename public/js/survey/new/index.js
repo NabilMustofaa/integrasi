@@ -1,28 +1,4 @@
-const editButton = {
-  icon: "edit",
-  onClick: function (e) {
-    // access the data of the clicked row
-    let data = e.row.data;
-    console.log(data);
-    $.ajax({
-      url: `/api/survey/${data.id}/question/${data.question_id}`,
-      type: "GET",
-      dataType: "json",
-    }).done(function (data) {
-      console.log(data);
-      
-      $("#popup").dxPopup({
-        title: "Edit Survey",
-        contentTemplate: popupContentTemplate(data),
-        showTitle: true,
-        width: 400,
-        height: 350,
-        hideOnOutsideClick: true,
-      });
-      $("#popup").dxPopup("instance").show();
-    });
-  }
-};
+
 
 const popupContentTemplate = function (data) {
   let optionParent = $('<div>').addClass('flex flex-col')
@@ -90,7 +66,21 @@ $.ajax({
       $("#dataGrid").dxDataGrid({
           dataSource: surveys,
           columns: [
-            {dataField: "id", dataType: "number", allowEditing: false, groupIndex: 0},
+            {dataField: "id",groupIndex: 0,
+            groupCellTemplate: function (element, info) {
+
+              element.append(
+                $('<div>').addClass('flex justify-between').append(
+                  $('<div>').addClass('my-auto').append(
+                    $('<div>').addClass('font-bold').text('Survey ID: '+info.key),
+                  ),
+                  $('<div>').addClass('my-auto').append(
+                    $('<a>').attr('id', 'survey_add').attr('href','/survey/new/'+info.key+'/edit').addClass('text-blue-500 underline').text('Edit Survey')
+                  ),
+                ),
+              );
+            },
+            },
             {dataField: "question_id", dataType: "number", allowEditing: false,visible: false},
             {dataField: "name", dataType: "string", allowEditing: false},
             {dataField: "description", dataType: "string", allowEditing: false},
@@ -98,12 +88,14 @@ $.ajax({
             {dataField: "type", dataType: "string", allowEditing: false},
             {
               type: "buttons",
-              buttons: [editButton, deleteButton],
+              buttons: [ deleteButton],
               width: 100,
             }
           ],
+          
       });
     });
+
 });
 
 $('#survey_add').on('click', function(e){
@@ -126,3 +118,9 @@ $('#survey_add').on('click', function(e){
 
   })
 })
+
+
+
+
+
+

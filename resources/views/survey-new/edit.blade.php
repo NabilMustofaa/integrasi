@@ -27,7 +27,7 @@
         <input type="text" name="question" id="question_{{ $question->id }}" class="p-2 border-b border-b-gray-300 my-4 focus:border-b focus:border-b-gray-600 focus:outline-none w-4/5" value="{{ $question->question }}">
         <select name="type" id="type_{{ $question->id }}" class="p-2 border border-gray-300 my-4 focus:border-b focus:border-b-gray-600 focus:outline-none w-1/5" onchange="changeInput('{{ $question->id }}')">
           @foreach ($select as $item)
-            <option value="{{ $item }}" {{ $question->type == $item ? 'selected' : '' }}>{{ $item }}</option>
+            <option value="{{ $item }}" {{ $question->type == $item ? 'selected' : '' }} >{{ $item }}</option>
           @endforeach
         </select>
       </div>
@@ -39,7 +39,7 @@
         @endphp
         @foreach ($question->options as $option)
           <div class="flex" id="option_place_{{ $option->id }}">
-            <input type="{{ $question->type }}" name="option_{{ $question->id }}" class="p-2 border-b border-b-gray-300 my-4 focus:border-b focus:border-b-gray-600 focus:outline-none option_{{ $question->id }} w-8" disabled placeholder="{{ $count++ }}">
+            <input type="{{ $question->type == 'select' ? 'radio' : $question->type }}" name="option_{{ $question->id }}" class="p-2 border-b border-b-gray-300 my-4 focus:border-b focus:border-b-gray-600 focus:outline-none option_{{ $question->id }} w-8" disabled placeholder="{{ $count++ }}" value="{{ $option->id }}" onchange="saveExpected('{{ $question->id }}')" {{ $question->expected->pluck('question_option_id')->contains($option->id) ? 'checked' : '' }}>
             <input type="text" id="option_label_{{ $option->id }}" class="p-2 border-b border-b-gray-300 my-4 focus:border-b focus:border-b-gray-600 focus:outline-none " value="{{ $option->option }}" onchange="changeOption('{{ $option->id }}')">
             <button type="button" class="bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded my-4" onclick="deleteOption('{{ $option->id }}')">Hapus</button>
             

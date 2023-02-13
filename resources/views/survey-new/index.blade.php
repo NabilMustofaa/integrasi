@@ -16,6 +16,8 @@
 </div>
 <div id="dataGrid"></div>
 
+<div id="tree"</div>
+
 <div id="popup"></div>
 
 <script src="{{ asset('js/survey/new/index.js') }}"></script>

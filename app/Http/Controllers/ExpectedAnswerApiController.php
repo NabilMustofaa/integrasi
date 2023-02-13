@@ -14,7 +14,7 @@ class ExpectedAnswerApiController extends Controller
     }
 
     function store (SurveyQuestion $surveyQuestion, Request $request) {
-        return response()->json($request->all(), 200);
+        
 
 
         if ($request->question_option_id == null && $request->expected == null) {
@@ -40,15 +40,21 @@ class ExpectedAnswerApiController extends Controller
         return response()->json($expected, 201);
     }
 
-    function update (SurveyQuestion $surveyQuestion, Request $request) {
-        $expected = $surveyQuestion->expected->first();
-        $expected->expected = $request->expected;
-        $expected->save();
-        return response()->json($expected, 200);
+    function update (SurveyQuestion $surveyQuestion,ExpectedAnswer $expectedAnswer, Request $request) {
+        $expected = [
+            'survey_question_id' => $surveyQuestion->id,
+            'question_option_id' => $request->question_option_id,
+            'answer' => $request->expected,
+            'created_by' => 1
+        ];
+
+        $expectedAnswer->update($expected);
+        return response()->json($expectedAnswer, 200);
+        
 
     }
 
-    function destroy (ExpectedAnswer $expectedAnswer) {
+    function destroy (SurveyQuestion $surveyQuestion,ExpectedAnswer $expectedAnswer) {
         $expectedAnswer->delete();
         return response()->json(null, 204);
     }

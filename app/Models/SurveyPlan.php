@@ -23,4 +23,9 @@ class SurveyPlan extends Model
     {
         return $this->belongsTo(Survey::class, 'survey_id');
     }
+
+    public function answers()
+    {
+        return $this->hasMany(SurveyAnswer::class, 'survey_plan_id');
+    }
 }

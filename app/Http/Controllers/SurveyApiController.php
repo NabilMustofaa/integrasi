@@ -24,6 +24,30 @@ class SurveyApiController extends Controller
         );
         return response()->json($surveys, 200);
     }
+
+    public function indexHierarchy ()
+    {
+        $surveys = DB::SELECT(
+            'SELECT 
+                surveys.id,
+                surveys.name as name
+            FROM surveys'
+        );
+
+        foreach ($surveys as $survey) {
+            $survey->questions = DB::SELECT(
+                'SELECT 
+                    survey_questions.id,
+                    survey_questions.question as name
+                FROM survey_questions
+                WHERE survey_questions.survey_id = :survey_id',
+                ['survey_id' => $survey->id]
+            );
+        }
+
+        return response()->json($surveys, 200);
+    }
+
     public function store(Request $request)
     {
         if ($request->name == null) {

@@ -144,9 +144,165 @@ navigator.mediaDevices.getUserMedia(constraints)
 
       $('#form').removeClass('hidden');
     });
-
-    
-
-
 }
+
+let formTimeout;
+
+
+
+console.log($('form[class="question-form"]').serialize());
+  $('form[class="question-form"]').on('change', function(e){
+    thisForm = $(this);
+    clearTimeout(formTimeout);
+    formTimeout = setTimeout(function(){
+      const type = thisForm[0].elements[0].value;
+      const id = thisForm.attr('id').split('_')[2];
+      console.log(type, id);
+      if (type == 'checkbox') {
+        let answer = [];
+        $('input[type="checkbox"]:checked').each(function(){
+          answer.push($(this).val());
+        });
+        console.log(answer);
+        $.ajax({
+          url: thisForm.attr('action'),
+          type: 'GET',
+        }).done(function(data){
+          console.log(data);
+          if(data.length == 0){
+            answer.forEach(function(item){
+              $.ajax({
+                url: thisForm.attr('action'),
+                type: 'POST',
+                data: {
+                  question_option_id: item
+                }
+              }).done(function(data){
+                console.log(data);
+              }).fail(function(err){
+                console.log(err);
+              });
+            });
+          }
+          else{
+            let optionId = [];
+            data.forEach(function(item){
+              // make string first before push
+              optionId.push(item.question_option_id.toString());
+            });
+            
+            console.log(optionId, answer);
+            const diff = optionId.filter(x => !answer.includes(x)); 
+            
+            diff.forEach(function(item){
+              //get index of item from data
+              const index = data.findIndex(x => x.question_option_id == item);
+
+              $.ajax({
+                url: thisForm.attr('action') + '/' + data[index].id,
+                type: 'DELETE',
+              }).done(function(data){
+                console.log(data);
+              }).fail(function(err){
+                console.log(err);
+              });
+            });
+
+            const diff2 = answer.filter(x => !optionId.includes(x));
+            console.log(diff2);
+
+            diff2.forEach(function(item){
+              $.ajax({
+                url: thisForm.attr('action'),
+                type: 'POST',
+                data: {
+                  question_option_id: item
+                }
+              }).done(function(data){
+                console.log(data);
+              }).fail(function(err){
+                console.log(err);
+              });
+            });
+          }
+        }).fail(function(err){
+          console.log(err);
+        });
+      }
+      else if(type == 'radio' || type == 'select'){
+        $.ajax({
+          url: thisForm.attr('action'),
+          type: 'GET',
+        }).done(function(data){
+          console.log(data);
+          if (data.length == 0) {
+            $.ajax({
+              url: thisForm.attr('action'),
+              type: 'POST',
+              data: {
+                question_option_id: thisForm[0].elements[2].value
+              }
+            }).done(function(data){
+              console.log(data);
+            }).fail(function(err){
+              console.log(err);
+            });
+          }
+          else{
+            $.ajax({
+              url: thisForm.attr('action') + '/' + data[0].id,
+              type: 'PUT',
+              data: {
+                question_option_id: thisForm[0].elements[2].value
+              }
+            }).done(function(data){
+              console.log(data);
+            }).fail(function(err){
+              console.log(err);
+            });
+          }
+        }).fail(function(err){
+          console.log(err);
+        });
+      }
+      else{
+        $.ajax({
+          url: thisForm.attr('action'),
+          type: 'GET',
+        }).done(function(data){
+          console.log(data,thisForm[0].elements[2].value);
+          if (data.length == 0) {
+            $.ajax({
+              url: thisForm.attr('action'),
+              type: 'POST',
+              data: {
+                answer: thisForm[0].elements[2].value
+              }
+            }).done(function(data){
+              console.log(data);
+            }).fail(function(err){
+              console.log(err);
+            });
+          }
+          else{
+            $.ajax({
+              url: thisForm.attr('action') + '/' + data[0].id,
+              type: 'PUT',
+              data: {
+                answer: thisForm[0].elements[2].value
+              }
+            }).done(function(data){
+              console.log(data);
+            }).fail(function(err){
+              console.log(err);
+            });
+          }
+        }).fail(function(err){
+          console.log(err);
+        });
+
+      }
+    }, 1000);
+    
+  });
 

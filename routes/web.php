@@ -24,7 +24,7 @@ Route::get('/', function () {
 });
 
 Route::prefix('survey')->group(function () {
-    Route::get('/', [SurveyController::class, 'index'])->name('survey.index');
+    Route::get('/', [SurveyNewController::class, 'index'])->name('survey.index');
     Route::get('/create', [SurveyController::class, 'create'])->name('survey.create');
     Route::get('/new', [SurveyNewController::class, 'index'])->name('survey.new.index');
     Route::get('/new/{survey}/edit', [SurveyNewController::class, 'edit'])->name('survey.new.show');

@@ -1,4 +1,4 @@
-let surveyFormTimeout,optionsTimeout;
+let surveyFormTimeout,optionsTimeout,expectedTimeout;
 let surveyId= $('#survey_id').val();
 let mainContent = $('#main_content');
 
@@ -54,8 +54,8 @@ $('#question_add').on('click', function(){
       <input type="text" name="answer_${dataQuestion.id}" id="answer_${dataQuestion.id}" class="p-2 border-b border-b-gray-300 my-4 focus:border-b focus:border-b-gray-600 focus:outline-none" value="ini contoh input type text" disabled>
       <div id="options_${dataQuestion.id}" class="hidden flex flex-col">
         <div class="flex" id="option_place_${data.id}">
-          <input type="radio" name="option_${dataQuestion.id}" class="p-2 border-b border-b-gray-300 my-4 focus:border-b focus:border-b-gray-600 focus:outline-none option_${dataQuestion.id} w-8" disabled>
-          <input id="option_label_${dataQuestion.id}" class="p-2 border-b border-b-gray-300 my-4 focus:border-b focus:border-b-gray-600 focus:outline-none " placeholder="option 1" onchange="changeOption('${data.id}')">
+          <input type="radio" name="option_${dataQuestion.id}" class="p-2 border-b border-b-gray-300 my-4 focus:border-b focus:border-b-gray-600 focus:outline-none option_${dataQuestion.id} w-8" disabled onchange="saveExpected('${dataQuestion.id}')" value="${data.id}">
+          <input id="option_label_${data.id}" class="p-2 border-b border-b-gray-300 my-4 focus:border-b focus:border-b-gray-600 focus:outline-none " placeholder="option 1" onchange="changeOption('${data.id}')">
           <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded my-4" onclick="deleteOption('${data.id}')">Hapus</button>
         </div>
         <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-4" onclick="addOption('${dataQuestion.id}')">Tambah Opsi</button>
@@ -96,7 +96,7 @@ const changeInput = (id) => {
     let i=1;
     $(`.option_${id}`).each(function(){
       if(select.val() == 'select'){
-        $(this).attr('type', 'text');
+        $(this).attr('type', 'radio');
         $(this).attr('placeholder', `${i++}`);
       }
       else{
@@ -138,9 +138,10 @@ const addOption = (id,type) => {
     let type = $(`select[id="type_${id}"]`).val();
     type = type == 'select' ? 'text' : type;
     let option = data;
+    console.log(option);
     let optionPlaceholder = `
     <div class="flex" id="option_place_${option.id}">
-      <input type="${type}" name="option_${id}" class="p-2 border-b border-b-gray-300 my-4 focus:border-b focus:border-b-gray-600 focus:outline-none option_${option.id} w-8" disabled>
+      <input type="${type}" name="option_${id}" class="p-2 border-b border-b-gray-300 my-4 focus:border-b focus:border-b-gray-600 focus:outline-none option_${option.id} w-8" disabled onchange="saveExpected('${id}')" value="${data.id}">
       <input id="option_label_${option.id}" class="p-2 border-b border-b-gray-300 my-4 focus:border-b focus:border-b-gray-600 focus:outline-none" value="${option.option}" onchange="changeOption('${option.id}')">
       <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded my-4" onclick="deleteOption('${option.id}')">Hapus</button>
     </div>
@@ -150,8 +151,10 @@ const addOption = (id,type) => {
 };
 
 const changeOption = (id) => {
+  console.log(id);
   let option = $(`input[id="option_label_${id}"]`);
   let value = option.val();
+  console.log(value,option);
   clearTimeout(optionsTimeout);
   optionsTimeout=setTimeout(function(){
     $.ajax({
@@ -195,9 +198,130 @@ const makeQuestion = (question_id) => {
   let button = $(this);
   let question = $(`.option_${question_id}`);
   question.each(function(){
+    if ($(this).attr('type') == 'select'){
+      $(this).attr('type', 'radio');
+    }
     $(this).attr('disabled', false);
   });
   console.log(button);
+};
 
 
+const saveExpected = (id) => {
+  let inputs = $(`input[name="option_${id}"]:checked`);
+  let type = inputs[0].type;
+  console.log(inputs[0].value);
+
+  clearTimeout(expectedTimeout);
+  expectedTimeout=setTimeout(function(){
+    $.ajax({
+      url: '/api/question/'+id+'/expected',
+      type: 'GET',
+    }).done(function(data){
+      console.log(data);
+  
+      if (data.length == 0) {
+        //post 
+        if (type == 'checkbox'){
+          inputs.each(function(){
+            $.ajax({
+              url: '/api/question/'+id+'/expected',
+              type: 'POST',
+              data: {
+                question_option_id: this.value,
+              },
+            }).done(function(data){
+              console.log(data);
+            }).fail(function(data){
+              console.log(data.responseJSON);
+            });
+          });
+        }
+        else{
+          $.ajax({
+            url: '/api/question/'+id+'/expected',
+            type: 'POST',
+            data: {
+              question_option_id: inputs[0].value,
+            },
+          })
+          .done(function(data){
+            console.log(data);
+          })
+          .fail(function(data){
+            console.log(data.responseJSON);
+          });
+        }
+
+        
+      }
+      else{
+        if (type == 'checkbox'){
+          let expectedIds = [];
+          data.forEach(function(item){
+            expectedIds.push(item.question_option_id.toString());
+          });
+  
+          let answerIds = [];
+          inputs.each(function(){
+            answerIds.push(this.value);
+          });
+
+  
+          console.log(expectedIds,answerIds);
+  
+          const diff = expectedIds.filter(x => !answerIds.includes(x));
+          console.log(diff);
+          diff.forEach(function(item){
+            index = data.findIndex(x => x.question_option_id == item);
+            $.ajax({
+              url: '/api/question/'+id+'/expected/'+data[index].id,
+              type: 'DELETE',
+            })
+            .done(function(data){
+              console.log(data);
+            })
+            .fail(function(data){
+              console.log(data.responseJSON);
+            });
+          });
+  
+          const diff2 = answerIds.filter(x => !expectedIds.includes(x));
+          console.log(diff2);
+          diff2.forEach(function(item){
+            $.ajax({
+              url: '/api/question/'+id+'/expected',
+              type: 'POST',
+              data: {
+                question_option_id: item,
+              },
+            })
+            .done(function(data){
+              console.log(data);
+            })
+            .fail(function(data){
+              console.log(data.responseJSON);
+            });
+          });
+  
+        }
+        else{
+          $.ajax({
+            url: '/api/question/'+id+'/expected/'+data[0].id,
+            type: 'PUT',
+            data: {
+              question_option_id: inputs[0].value,
+            },
+          })
+          .done(function(data){
+            console.log(data);
+          })
+          .fail(function(data){
+            console.log(data.responseJSON);
+          });
+        }
+      }
+      
+    });
+  }, 1000);
 };

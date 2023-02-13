@@ -114,6 +114,9 @@ class SurveyPlanApiController extends Controller
         $file = 'snapshot/'.$surveyPlan->id.'-'.$current_date.'.png';
         Storage::disk('public')->put($file, $image_base64);
 
+        $surveyPlan->photo = $file;
+        $surveyPlan->save();
+
         
         return response()->json([
             'message' => 'Snapshot saved successfully',
