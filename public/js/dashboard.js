@@ -3,7 +3,7 @@ console.log('dashboard.js loaded');
 $(document).ready(function() {
   $('.dropdown').on('click', function() {
     let dropdown =$(`#dropdown-${this.id}`);
-    dropdown.toggleClass('-translate-y-[120%]');
+    dropdown.toggleClass('-translate-y-[500%]');
   })  
 
   $('#timeplan').click(function(){
@@ -34,3 +34,4 @@ $('#hamburger').click(function(){
   $('#sidebar-placeholder').toggleClass('max-md:-translate-x-full');
   
 });
+

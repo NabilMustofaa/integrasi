@@ -66,7 +66,7 @@ $.ajax({
       $("#dataGrid").dxDataGrid({
           dataSource: surveys,
           columns: [
-            {dataField: "id",groupIndex: 0,
+            {dataField: "id",groupIndex: 0,hidingPriority:2,
             groupCellTemplate: function (element, info) {
 
               element.append(
@@ -82,20 +82,20 @@ $.ajax({
             },
             },
             {dataField: "question_id", dataType: "number", allowEditing: false,visible: false},
-            {dataField: "name", dataType: "string", allowEditing: false},
-            {dataField: "description", dataType: "string", allowEditing: false},
+            {dataField: "name", dataType: "string", allowEditing: false,hidingPriority: 1},
+            {dataField: "description", dataType: "string", allowEditing: false,hidingPriority: 0},
             {dataField: "question", dataType: "string", allowEditing: false},
             {dataField: "type", dataType: "string", allowEditing: false},
             {
               type: "buttons",
               buttons: [ deleteButton],
-              width: 100,
+              width: 50,
             }
           ],
           
       });
-    });
-
+    }
+    );
 });
 
 $('#survey_add').on('click', function(e){
@@ -118,6 +118,10 @@ $('#survey_add').on('click', function(e){
 
   })
 })
+
+
+
+
 
 
 

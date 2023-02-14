@@ -1,4 +1,13 @@
 @extends('layouts.main')
+
+@section('styles')
+<style>
+  .dx-datagrid-hidden-colums{
+    display: block !important;
+  }
+</style>
+
+@endsection
 @section('content')
 
 

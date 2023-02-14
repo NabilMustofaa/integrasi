@@ -39,9 +39,13 @@
         <h1 class=" text-3xl font-bold"> Plan</h1>
         <div id="notification"></div>
     </div>
-    <div class=" mt-8 flex flex-col-reverse h-[80vh] gap-8">
-        <form action="/api/plans" method="POST" id="list" class="flex w-full h-1/2 bg-white border border-gray-100 shadow-md rounded-md gap-8 p-4">
-            <div class="w-1/2">
+    <div class=" flex flex-col mt-12 h-[80vh] max-md:h-full gap-8">
+        <div id="map" class="w-full h-1/2"></div>
+        <form action="/api/plans" method="POST" id="list" class="flex flex-row-reverse w-full bg-white border max-md:h-1/2 border-gray-100 shadow-md rounded-md gap-8 p-4 max-md:flex-col overflow-auto">
+            <div class="w-1/2 max-md:w-full">
+                <div id="dataGrid"></div>
+            </div>
+            <div class="w-1/2 max-md:w-full">
                 <label for="survey_id" class="block font-medium mb-4 text-gray-700">Survey</label>
                 <select name="survey_id" id="survey_id" class="border p-2 w-full my-2">
                     <option value="0">Select Survey</option>
@@ -64,15 +68,12 @@
     
                 <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     onclick="sendForm()">Submit</button>
-    
             </div>
-            <div class="w-1/2">
-                <div id="dataGrid"></div>
-            </div>
+           
         </form>
 
 
-        <div id="map" class="w-full h-1/2"></div>
+        
     </div>
 @endsection
 

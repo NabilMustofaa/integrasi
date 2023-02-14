@@ -6,22 +6,22 @@ const dataGridInstance = () => {
     url: '/api/qa',
     type: 'GET',
     dataType: 'json',
-
 }).done(function (data) {
-  data = data;
   dataGrid.dxDataGrid({
     dataSource: data,
     columns: [
-      {dataField: 'id', caption: 'ID',width: 100},
+      {dataField: 'id', caption: 'ID',width: 30},
       {dataField: 'name', caption: 'Quality Assurance Name'},
-      {dataField: 'phone', caption: 'Quality Assurance Phone'},
-      {dataField: 'address', caption: 'Quality Assurance Address'},
+      {dataField: 'phone', caption: 'Quality Assurance Phone', hidingPriority: 1},
+      {dataField: 'address', caption: 'Quality Assurance Address', hidingPriority: 0},
       {dataField: 'branch_name', caption: 'Branch Name'},
       {
-        dataType: 'Button',
+        dataType: 'button',
         buttons: [editButton, deleteButton],
         width: 100,
-      }
+        visible: true,
+        caption: 'Action',
+      },
     ],
   })
 })

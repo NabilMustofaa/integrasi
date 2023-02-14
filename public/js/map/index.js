@@ -32,14 +32,9 @@ $.ajax({
       $("#dataGrid").dxDataGrid({
           dataSource: stores,
           columns: [
-            "name",
-            "address",
-            "sales",
-            "phone",
-
-            {dataField: "id", caption: "ID", width: 100},
+            {dataField: "id", caption: "ID",width: 20},
             {dataField: "name", caption: "Store Name"},
-            {dataField: "address", caption: "Store Address"},
+            {dataField: "address", caption: "Store Address", hidingPriority: 0},
             {dataField: "sales", groupIndex: 0, caption: "Sales"},
             {dataField: "phone", caption: "Store Phone"},
 
@@ -52,7 +47,6 @@ $.ajax({
                   zoom: 15
                 });
 
-                markers[data.id].togglePopup();
               });
           },
       });

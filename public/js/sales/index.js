@@ -12,14 +12,14 @@ const dataGridInstance = () => {
   dataGrid.dxDataGrid({
     dataSource: data,
     columns: [
-      {dataField: 'id', caption: 'ID',width: 100},
+      {dataField: 'id', caption: 'ID',width: 20},
       {dataField: 'name', caption: 'Sales Name'},
       {dataField: 'phone', caption: 'Sales Phone'},
-      {dataField: 'address', caption: 'Sales Address'},
+      {dataField: 'address', caption: 'Sales Address',width: 400, hidingPriority: 0},
       {
         type: "buttons",
         buttons: [editButton, deleteButton],
-        width: 100,
+        width: 50,
       }
     ],
   })
@@ -35,11 +35,11 @@ const editButton = {
     console.log(url);
     console.log(data);
     popup= $('#popup').dxPopup({
-      title: 'Create Sales',
+      title: 'Edits Sales',
       contentTemplate: popupContentTemplateWithEdit(data),
       showTitle: true,
-      width:400,
-      height: 350,
+      minWidth:200,
+      minHeight: 200,
       visible: false,
       dragEnabled: false,
       hideOnOutsideClick: true,
@@ -136,8 +136,8 @@ sales_add.on('click', function () {
     title: 'Create Sales',
     contentTemplate: popupContentTemplate,
     showTitle: true,
-    width:400,
-    height: 350,
+    minWidth:200,
+    minHeight: 200,
     visible: false,
     dragEnabled: false,
     hideOnOutsideClick: true,

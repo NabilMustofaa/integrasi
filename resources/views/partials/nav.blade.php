@@ -14,6 +14,6 @@
     </svg>
   </button>
 </div>
-<div class=" flex flex-col w-32 shadow-md border-gray-200 absolute right-2 top-16 py-4 rounded-md bg-gray-50 -translate-y-[120%] z-10 transition-all duration-500 ease-in-out transform" id="dropdown-profile">
+<div class=" flex flex-col w-32 shadow-md border-gray-200 absolute right-2 top-16 py-4 rounded-md bg-gray-50 -translate-y-[500%] z-10 transition-all duration-500 ease-in-out transform" id="dropdown-profile">
   <a href="" class="text-right px-2 py-2 hover:bg-gray-100 hover:rounded-md"> Sign Out</a>
 </div>

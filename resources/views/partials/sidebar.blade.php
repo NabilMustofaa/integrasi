@@ -45,7 +45,7 @@
           </svg>
         </div>
       </button>
-     <div id="dropdown-create-project" class="hidden">
+     <div id="dropdown-create-project" class="-translate-y-[500%] transition-all delay-200 transform">
         <a href="/plan" class="flex justify-start content-center m-2 px-12 py-4 gap-4 hover:bg-gray-100 hover:rounded-md">
           Survey Plan Table
         </a>
