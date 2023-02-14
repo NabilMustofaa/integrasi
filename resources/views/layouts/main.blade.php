@@ -23,10 +23,10 @@
   
   @include('partials.nav')
   <div class=" flex w-screen">
-    <div class="w-1/6 max-md:hidden">
+    <div class="w-1/6 max-md:w-1/2 max-md:absolute z-10 bg-white shadow-md max-md:-translate-x-full transition-all duration-500 ease-in-out transform" id="sidebar-placeholder">
       @include('partials.sidebar')
     </div>
-    <div class="w-5/6 max-md:w-full p-12 pt-20 h-screen overflow-auto" id="main_content">
+    <div class="w-5/6 max-md:w-full p-12 pt-20 max-md:p-4 max-md:pt-20 h-screen overflow-auto" id="main_content">
       @yield('content')
     </div>
 

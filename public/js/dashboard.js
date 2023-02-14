@@ -3,7 +3,7 @@ console.log('dashboard.js loaded');
 $(document).ready(function() {
   $('.dropdown').on('click', function() {
     let dropdown =$(`#dropdown-${this.id}`);
-    dropdown.toggleClass('hidden');
+    dropdown.toggleClass('-translate-y-[120%]');
   })  
 
   $('#timeplan').click(function(){
@@ -23,4 +23,14 @@ $(document).ready(function() {
       });
     });
   });
+});
+
+
+$('#hamburger').click(function(){
+  icon = $(this).find('path');
+  console.log(icon);
+  icon[0].classList.toggle('opacity-100');
+  icon[1].classList.toggle('opacity-0');
+  $('#sidebar-placeholder').toggleClass('max-md:-translate-x-full');
+  
 });

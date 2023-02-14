@@ -23,9 +23,9 @@
   </button>
 
 </div>
-<div class="flex h-96">
-  <div id="dataGrid" class="w-1/2"></div>
-  <div id="map" class="w-1/2"></div>
+<div class="flex h-full max-md:flex-col-reverse">
+  <div id="dataGrid" class="w-1/2 max-md:w-full"></div>
+  <div id="map" class="w-1/2 max-md:w-full max-md:h-full"></div>
 </div>
 
 
